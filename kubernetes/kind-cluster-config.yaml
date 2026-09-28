@@ -21,5 +21,14 @@ nodes:
     hostPort: 30443
     protocol: TCP
 - role: worker
+  extraMounts:
+      - hostPath: /home/juliassedantas/kind-data
+        containerPath: /mnt/dados
 - role: worker
+  extraMounts:
+      - hostPath: /home/juliassedantas/kind-data
+        containerPath: /mnt/dados
 - role: worker
+  extraMounts:
+      - hostPath: /home/juliassedantas/kind-data
+        containerPath: /mnt/dados
