@@ -15,7 +15,7 @@ spec:
     - ReadWriteOnce
   storageClassName: jenkins-storage
   local:
-    path: /mnt/dados/jenkins
+    path: /mnt/jenkins
   nodeAffinity:
     required:
       nodeSelectorTerms:
