@@ -5,4 +5,4 @@ metadata:
   namespace: falco
 spec:
   interval: 24h
-  url: https://falcosecurity.github.io/charts
+  url: https://falcosecurity.github.io/charts 
