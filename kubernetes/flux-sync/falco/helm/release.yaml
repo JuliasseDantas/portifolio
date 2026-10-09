@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: release
+  namespace: falco
+spec:
+  interval: 24h
+  chart:
+    spec:
+      chart: falco
+      version: "9.2.0"
+      sourceRef:
+        kind: HelmRepository
+        name: repository
+  install:
+    createNamespace: false
+  targetNamespace: falco
+  values:
+    tty: true
