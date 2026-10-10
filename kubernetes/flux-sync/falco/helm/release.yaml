@@ -37,3 +37,7 @@ spec:
       enabled: true
       webui:
         enabled: true
+      teams:
+        webhook: "https://default2d93a51c32d44a10aa44d35dee05cd.44.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/ed124b63ea304c4f81d3335804d1cd68/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=V7AWqxMhKQpHj7YhuNVheE-JLkt69UEU3agQ5nEIuA8"
+        minimumpriority: notice
+
