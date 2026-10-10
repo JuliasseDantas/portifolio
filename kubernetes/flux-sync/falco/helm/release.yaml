@@ -33,3 +33,7 @@ spec:
             parent=%proc.pname command=%proc.cmdline terminal=%proc.tty
           priority: WARNING
           tags: [filesystem, mitre_persistence]
+    falcosidekick:
+      enabled: true
+      webui:
+        enabled: true
