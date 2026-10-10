@@ -18,8 +18,8 @@ spec:
   values:
     tty: true
     customRules: 
-      custom-rules:
-        - rule: Write below etc
+      custom-rules.yaml: |-
+          rule: Write below etc
           desc: An attempt to write to /etc directory
           condition: >
             (evt.type in (open,openat,openat2) and evt.is_open_write=true and fd.typechar='f' and fd.num>=0)
