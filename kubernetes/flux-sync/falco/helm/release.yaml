@@ -20,7 +20,59 @@ spec:
       args:
         - "--enable-source=syscall"
         - "--enable-source=k8s_audit"
+
+    falcoctl:
+      artifact:
+        install:
+          enabled: true
+        follow:
+          enabled: true
+
+      config:
+        artifact:
+          install:
+            resolveDeps: true
+            refs:
+              - falco-rules:5
+              - k8saudit-rules:0.16
+              - k8saudit:0.16
+
+          follow:
+            refs:
+              - falco-rules:5
+              - k8saudit-rules:0.16
+
+    services:
+      - name: k8saudit-webhook
+        type: NodePort
+        ports:
+          - port: 9765
+            nodePort: 30007
+            protocol: TCP
+
+    falco:
+      rules_files:
+        - /etc/falco/falco_rules.yaml
+        - /etc/falco/falco_rules.local.yaml
+        - /etc/falco/k8s_audit_rules.yaml
+        - /etc/falco/rules.d
+
+      plugins:
+        - name: k8saudit
+          library_path: libk8saudit.so
+          init_config: ""
+          open_params: "http://:9765/k8s-audit"
+
+        - name: json
+          library_path: libjson.so
+          init_config: ""
+
+      load_plugins:
+        - k8saudit
+        - json
+        
     tty: true
+
     falcosidekick:
       enabled: true
       webui:
