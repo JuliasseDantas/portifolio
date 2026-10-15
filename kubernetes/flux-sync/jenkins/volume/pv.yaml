@@ -10,7 +10,7 @@ spec:
     name: pvc-jenkins
     namespace: jenkins
   capacity:
-    storage: 10Gi
+    storage: 9Gi
   accessModes:
     - ReadWriteOnce
   storageClassName: jenkins-storage
