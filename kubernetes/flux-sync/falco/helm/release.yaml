@@ -19,6 +19,7 @@ spec:
     extra:
       args:
         - "--enable-source=syscall"
+        - "--enable-source=k8s_audit"
     tty: true
     falcosidekick:
       enabled: true
