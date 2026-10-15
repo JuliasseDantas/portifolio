@@ -1,103 +1,103 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: release
-  namespace: falco
-spec:
-  interval: 24h
-  chart:
-    spec:
-      chart: falco
-      version: "9.2.0"
-      sourceRef:
-        kind: HelmRepository
-        name: repository
-  install:
-    createNamespace: false
-  targetNamespace: falco
-  values:
-    extra:
-      args:
-        - "--enable-source=syscall"
-        - "--enable-source=k8s_audit"
+# apiVersion: helm.toolkit.fluxcd.io/v2
+# kind: HelmRelease
+# metadata:
+#   name: release
+#   namespace: falco
+# spec:
+#   interval: 24h
+#   chart:
+#     spec:
+#       chart: falco
+#       version: "9.2.0"
+#       sourceRef:
+#         kind: HelmRepository
+#         name: repository
+#   install:
+#     createNamespace: false
+#   targetNamespace: falco
+#   values:
+#     extra:
+#       args:
+#         - "--enable-source=syscall"
+#         - "--enable-source=k8s_audit"
 
-    falcoctl:
-      artifact:
-        install:
-          enabled: true
-        follow:
-          enabled: true
+#     falcoctl:
+#       artifact:
+#         install:
+#           enabled: true
+#         follow:
+#           enabled: true
 
-      config:
-        artifact:
-          install:
-            resolveDeps: true
-            refs:
-              - falco-rules:5
-              - k8saudit-rules:0.16
-              - k8saudit:0.16
+#       config:
+#         artifact:
+#           install:
+#             resolveDeps: true
+#             refs:
+#               - falco-rules:5
+#               - k8saudit-rules:0.16
+#               - k8saudit:0.16
 
-          follow:
-            refs:
-              - falco-rules:5
-              - k8saudit-rules:0.16
+#           follow:
+#             refs:
+#               - falco-rules:5
+#               - k8saudit-rules:0.16
 
-    services:
-      - name: k8saudit-webhook
-        type: NodePort
-        ports:
-          - port: 9765
-            nodePort: 30007
-            protocol: TCP
+#     services:
+#       - name: k8saudit-webhook
+#         type: NodePort
+#         ports:
+#           - port: 9765
+#             nodePort: 30007
+#             protocol: TCP
 
-    falco:
-      rules_files:
-        - /etc/falco/falco_rules.yaml
-        - /etc/falco/falco_rules.local.yaml
-        - /etc/falco/k8s_audit_rules.yaml
-        - /etc/falco/rules.d
+#     falco:
+#       rules_files:
+#         - /etc/falco/falco_rules.yaml
+#         - /etc/falco/falco_rules.local.yaml
+#         - /etc/falco/k8s_audit_rules.yaml
+#         - /etc/falco/rules.d
 
-      plugins:
-        - name: k8saudit
-          library_path: libk8saudit.so
-          init_config: ""
-          open_params: "http://:9765/k8s-audit"
+#       plugins:
+#         - name: k8saudit
+#           library_path: libk8saudit.so
+#           init_config: ""
+#           open_params: "http://:9765/k8s-audit"
 
-        - name: json
-          library_path: libjson.so
-          init_config: ""
+#         - name: json
+#           library_path: libjson.so
+#           init_config: ""
 
-      load_plugins:
-        - k8saudit
-        - json
+#       load_plugins:
+#         - k8saudit
+#         - json
 
-    tty: true
+#     tty: true
 
-    falcosidekick:
-      enabled: true
-      webui:
-        enabled: true
-      config:
-        teams:
-          webhookurl: "https://default2d93a51c32d44a10aa44d35dee05cd.44.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/ed124b63ea304c4f81d3335804d1cd68/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=V7AWqxMhKQpHj7YhuNVheE-JLkt69UEU3agQ5nEIuA8"
-          minimumpriority: notice
-    customRules: 
-      flux-audit-exceptions.yaml: |-
-        - rule: K8s Secret Get Successfully
-          override:
-            exceptions: append
-          exceptions:
-            - name: flux_source_controller_git_credentials
-              fields:
-                - ka.user.name
-                - ka.target.namespace
-                - ka.target.name
-              comps: ["=", "=", "="]
-              values:
-                - [
-                    "system:serviceaccount:flux-system:source-controller",
-                    "flux-system",
-                    "flux-system"
-                  ]
+#     falcosidekick:
+#       enabled: true
+#       webui:
+#         enabled: true
+#       config:
+#         teams:
+#           webhookurl: "https://default2d93a51c32d44a10aa44d35dee05cd.44.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/ed124b63ea304c4f81d3335804d1cd68/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=V7AWqxMhKQpHj7YhuNVheE-JLkt69UEU3agQ5nEIuA8"
+#           minimumpriority: notice
+#     customRules: 
+#       flux-audit-exceptions.yaml: |-
+#         - rule: K8s Secret Get Successfully
+#           override:
+#             exceptions: append
+#           exceptions:
+#             - name: flux_source_controller_git_credentials
+#               fields:
+#                 - ka.user.name
+#                 - ka.target.namespace
+#                 - ka.target.name
+#               comps: ["=", "=", "="]
+#               values:
+#                 - [
+#                     "system:serviceaccount:flux-system:source-controller",
+#                     "flux-system",
+#                     "flux-system"
+#                   ]
     
 
